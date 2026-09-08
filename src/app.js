@@ -8,8 +8,8 @@ app.get('/', async (req, res) => {
     const { location } = await req.query;
 
     if (!location) {
-        res.status(200).json({
-            message: "Location Not found",
+        return res.status(400).json({
+            message: "Location Not Found",
         })
     }
     await Intializer(location)
@@ -17,7 +17,10 @@ app.get('/', async (req, res) => {
         res.status(200).json(final_data)
     })
     .catch((err) => {
-        console.log(err);
+        console.log(err.message);
+        res.status(500).json({
+            message: err.message || "Error fetching weather data",
+        })
     })
 })
 

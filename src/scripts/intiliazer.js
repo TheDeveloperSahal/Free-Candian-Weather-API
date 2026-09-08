@@ -13,11 +13,11 @@ async function Intializer(location) {
                     final_data = data;
                 })
                 .catch((err) => {
-                    console.log("error while cleaning data:", err)
+                    throw err;
                 })
         })
         .catch((err) => {
-            console.log("Error While Getting Data:", err)
+            throw err;
         })
     return final_data;
 }

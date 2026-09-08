@@ -3,12 +3,16 @@ const GetCountry = require('./getCountry');
 async function DataCleaner(blob, lati, long) {
     let data = [];
     await blob.json()
-        .then(async ([response]) => {
+        .then(async (parsed) => {
+            const [response] = Array.isArray(parsed) ? parsed : [parsed];
+            if (!response || !response.observation) {
+                throw new Error(response?.error === "OUT_OF_SERVICE_BOUNDARY" ? "Location not supported (Canada only)" : response?.error || "Invalid response from weather service");
+            }
             const location = {
                 "name": response["observation"]["observedAt"].split(" ")[0],
                 "Country": (await GetCountry(lati, long)).country,
                 "region": (await GetCountry(lati, long)).state,
-                "latitide": lati,
+                "latitude": lati,
                 "longitude": long,
                 "timezone": await getTimeZone(lati, long),
             }
@@ -22,7 +26,7 @@ async function DataCleaner(blob, lati, long) {
                         "rounded": response["observation"]["temperature"]["imperial"],
                     },
                     "celsius": {
-                        "Actual": response["observation"]["temperature"]["metricUnrounded"],
+                        "actual": response["observation"]["temperature"]["metricUnrounded"],
                         "rounded": response["observation"]["temperature"]["metric"],
                     }
                 },
@@ -36,7 +40,7 @@ async function DataCleaner(blob, lati, long) {
                         "rounded": response["observation"]["dewpoint"]["imperial"],
                     },
                     "celsius": {
-                        "Actual": response["observation"]["dewpoint"]["metricUnrounded"],
+                        "actual": response["observation"]["dewpoint"]["metricUnrounded"],
                         "rounded": response["observation"]["dewpoint"]["metric"],
                     },
                     "quality": response["observation"]["dewpoint"]["qaValue"]
