@@ -1,5 +1,8 @@
-# candian Weather Scraper API
-
+# FREE Candian Weather Scraper API
+## PUBLIC URL
+```
+https://free-canadian-weather-api.vercel.app/?location=toronto
+```
 A Node.js REST API that returns current weather conditions and forecasts for Canadian locations in a clean, normalized JSON format. It geocodes a location name into coordinates, fetches raw weather data from Environment Canada, then enriches and cleans it into a consistent structure with both metric and imperial units.
 
 Built as a portfolio project to demonstrate web scraping, third-party API aggregation, data normalization, and error handling.
